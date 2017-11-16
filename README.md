@@ -5,6 +5,7 @@
 ```shell
 mkdir ~/Documents/1pass-snm
 git clone https://github.com/Littlejord27/1password-securenote-maker.git ~/Documents/1pass-snm
+chmod u+x ~/Documents/1pass-snm/./install.sh
 ~/Documents/1pass-snm/./install.sh mac
 ```
 
@@ -13,6 +14,7 @@ git clone https://github.com/Littlejord27/1password-securenote-maker.git ~/Docum
 ```shell
 mkdir ~/Documents/1pass-snm
 git clone https://github.com/Littlejord27/1password-securenote-maker.git ~/Documents/1pass-snm
+chmod u+x ~/Documents/1pass-snm/./install.sh
 ~/Documents/1pass-snm/./install.sh linux
 ```
 
