@@ -9,7 +9,7 @@ git clone https://github.com/Littlejord27/1password-securenote-maker.git ~/Docum
 ```
 
 
-#### linux x32 install (Digital Ocean droplets)
+#### Linux x32 install (Digital Ocean droplets)
 ```shell
 mkdir ~/Documents/1pass-snm
 git clone https://github.com/Littlejord27/1password-securenote-maker.git ~/Documents/1pass-snm
@@ -53,31 +53,31 @@ It will create a 1password secure note in your private vault as well as generate
 ```
 
 
-# 1pass-login
+### 1pass-login
 
 ```shell
 1pass username "Secure Note - Title - Name"
 ```
 
-# 1pass-create-securenote
+### 1pass-create-securenote
 
 ```shell
 1pass-create-securenote username "Secure Note - Title - Name"
 ```
 
-# 1pass-create-env
+### 1pass-create-env
 
 ```shell
 1pass-create-configdb uuid
 ```
 
-# 1pass-create-configdb
+### 1pass-create-configdb
 
 ```shell
 1pass-create-configdb uuid
 ```
 
-# 1pass-create-config
+### 1pass-create-config
 
 ```shell
 1pass-create-config
