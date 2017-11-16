@@ -26,7 +26,7 @@ You will need your secret key for the next part (A3-XXXXXX-XXXXXX-XXXXX-XXXXX-XX
 In your terminal, run the following command:
 
 ```shell
-op signin coolblueweb.1password.com coolbluedude@coolblueweb.com A3-XXXXXX-XXXXXX-XXXXX-XXXXX-XXXXX-XXXXX)
+op signin coolblueweb.1password.com coolbluedude@coolblueweb.com A3-XXXXXX-XXXXXX-XXXXX-XXXXX-XXXXX-XXXXX
 ```
 
 It should prompt you for your 1password master password. 
