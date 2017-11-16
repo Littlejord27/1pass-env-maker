@@ -11,6 +11,7 @@ if [ "$#" -eq 1 ]
     echo "Copying jq to /usr/local/bin/"
     if [ "$1" = "mac" ]
      then
+      chmod u+x ~/Documents/1pass-snm/osx/jq
       cp ~/Documents/1pass-snm/osx/jq /usr/local/bin/
     fi
     if [ "$1" = "linux" ]
@@ -28,6 +29,7 @@ if [ "$#" -eq 1 ]
     echo "Copying op to /usr/local/bin/"
     if [ "$1" = "mac" ]
      then
+      chmod u+x ~/Documents/1pass-snm/osx/op
       cp ~/Documents/1pass-snm/osx/op /usr/local/bin/
     fi
     if [ "$1" = "linux" ]
