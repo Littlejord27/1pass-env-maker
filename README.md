@@ -40,16 +40,34 @@ or
 eval $(op signin company)
 ```
 
-## First time setup
+## Usage
 
-Error: Valut "Private" not found
+General Usage:
+
+The most complete function is the **1pass** function. It takes in a username and a title. 
+It will create a 1password secure note in your private vault as well as generate an
+.env, wp-config-db.php, and wp-config.php file in the directory you call the function.
+
+```shell
+1pass username "Secure Note - Title - Name"
+```
+
+#1pass-login
+#1pass-create-securenote
+#1pass-create-env
+#1pass-create-configdb
+#1pass-create-config
+
+
 
 ## Known Issues
 
-#### Mac
+Error: Valut "Private" not found
+
+### Mac
 
 No Mac Specific Issues
 
-#### Linux (digital ocean)
+### Linux (digital ocean)
 
 No Linux Specific Issues
