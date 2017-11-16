@@ -3,19 +3,17 @@
 
 #### Mac OSX x64 install
 ```shell
-mkdir ~/Documents/1pass-cbw
-git clone https://github.com/jordan-cbw/1pass-cbw.git ~/Documents/1pass-cbw
-cd ~/Documents/1pass-cbw
-./install.sh mac
+mkdir ~/Documents/1pass-snm
+git clone https://github.com/Littlejord27/1password-securenote-maker.git ~/Documents/1pass-snm
+~/Documents/1pass-snm/./install.sh mac
 ```
 
 
 #### linux x32 install (Digital Ocean droplets)
 ```shell
-mkdir ~/Documents/1pass-cbw
-git clone https://github.com/jordan-cbw/1pass-cbw.git ~/Documents/1pass-cbw
-cd ~/Documents/1pass-cbw
-./install.sh linux
+mkdir ~/Documents/1pass-snm
+git clone https://github.com/Littlejord27/1password-securenote-maker.git ~/Documents/1pass-snm
+~/Documents/1pass-snm/./install.sh linux
 ```
 
 ## First time setup
@@ -26,7 +24,7 @@ You will need your secret key for the next part (A3-XXXXXX-XXXXXX-XXXXX-XXXXX-XX
 In your terminal, run the following command:
 
 ```shell
-op signin coolblueweb.1password.com coolbluedude@coolblueweb.com A3-XXXXXX-XXXXXX-XXXXX-XXXXX-XXXXX-XXXXX
+op signin company.1password.com email@domain.com A3-XXXXXX-XXXXXX-XXXXX-XXXXX-XXXXX-XXXXX
 ```
 
 It should prompt you for your 1password master password. 
@@ -39,5 +37,19 @@ After that, you can sign in using
 or
 
 ```shell
-eval $(op signin coolblueweb)
+eval $(op signin company)
 ```
+
+## First time setup
+
+Error: Valut "Private" not found
+
+## Known Issues
+
+#### Mac
+
+No Mac Specific Issues
+
+#### Linux (digital ocean)
+
+No Linux Specific Issues
