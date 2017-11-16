@@ -11,11 +11,11 @@ if [ "$#" -eq 1 ]
     echo "Copying jq to /usr/local/bin/"
     if [ "$1" = "mac" ]
      then
-      cp ~/Documents/1pass-cbw/osx/jq /usr/local/bin/
+      cp ~/Documents/1pass-snm/osx/jq /usr/local/bin/
     fi
     if [ "$1" = "linux" ]
      then
-      cp ~/Documents/1pass-cbw/linux/jq /usr/local/bin/
+      cp ~/Documents/1pass-snm/linux/jq /usr/local/bin/
     fi
   fi
 
@@ -28,21 +28,21 @@ if [ "$#" -eq 1 ]
     echo "Copying op to /usr/local/bin/"
     if [ "$1" = "mac" ]
      then
-      cp ~/Documents/1pass-cbw/osx/op /usr/local/bin/
+      cp ~/Documents/1pass-snm/osx/op /usr/local/bin/
     fi
     if [ "$1" = "linux" ]
      then
-      cp ~/Documents/1pass-cbw/linux/op /usr/local/bin/
+      cp ~/Documents/1pass-snm/linux/op /usr/local/bin/
     fi
   fi
 
   # Append the onepass path into the bashrc or zshrc file
   if [ -f ~/.bashrc ]
    then
-    echo "source ~/Documents/1pass-cbw/onepass.sh" >> ~/.bashrc
+    echo "source ~/Documents/1pass-snm/onepass.sh" >> ~/.bashrc
    elif [ -f ~/.zshrc ]
     then
-     echo "source ~/Documents/1pass-cbw/onepass.sh" >> ~/.zshrc
+     echo "source ~/Documents/1pass-snm/onepass.sh" >> ~/.zshrc
    else
     echo "Can not find bashrc or zshrc to add to. Add ~/Documents/1pass-cbw/onepass.sh to your path terminal somehow."
   fi
