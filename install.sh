@@ -52,10 +52,14 @@ if [ "$#" -eq 1 ]
       echo "source ~/.scripts/1pass-snm/onepass.sh" >> ~/.bashrc
     fi
     echo "Appending to ~/.bashrc"
-   elif [ -f ~/.zshrc ]
-    then
-     echo "# 1pass CLI Source from https://github.com/Littlejord27/1password-securenote-maker" >> ~/.zshrc
-     if [ "$1" = "mac" ]
+   else
+    echo "No .basshrc"
+  fi #end of basshrc
+
+  if [ -f ~/.zshrc ]
+   then
+    echo "# 1pass CLI Source from https://github.com/Littlejord27/1password-securenote-maker" >> ~/.zshrc
+    if [ "$1" = "mac" ]
      then
       echo "source ~/Documents/1pass-snm/onepass.sh" >> ~/.zshrc
     fi
@@ -63,10 +67,11 @@ if [ "$#" -eq 1 ]
      then
       echo "source ~/.scripts/1pass-snm/onepass.sh" >> ~/.zshrc
     fi
-     echo "Appending to ~/.zshrc"
+    echo "Appending to ~/.zshrc"
    else
-    echo "Can not find bashrc or zshrc to add to. Add ~/Documents/1pass-cbw/onepass.sh to your path terminal somehow."
-  fi
+    echo "No .zshrc"
+  fi #end of zshrc
+  
  else
   echo 'Error: "mac" or "linux"'
 fi
