@@ -4,7 +4,7 @@ if [ "$#" -eq 1 ]
  then
   # Check to see if the json processor (jq) is already installed.
   # If it isn't, then copy this file into the bin folder
-  if [ -f /usr/local/bin/jq ]
+  if [ -f /usr/local/bin/jq ] || [ -f /usr/bin/jq ];
    then
     echo "jq found. Not installing."
    else
@@ -16,13 +16,13 @@ if [ "$#" -eq 1 ]
     fi
     if [ "$1" = "linux" ]
      then
-      cp ~/Documents/1pass-snm/linux/jq /usr/local/bin/
+      sudo apt-get install jq
     fi
   fi
 
   # Check to see if the 1pass cli is already installed.
   # If it isn't, then copy this file into the bin folder
-  if [ -f /usr/local/bin/op ]
+  if [ -f /usr/local/bin/op ] || [ -f /usr/bin/op ];
    then
     echo "op found. Not installing."
    else
@@ -34,17 +34,36 @@ if [ "$#" -eq 1 ]
     fi
     if [ "$1" = "linux" ]
      then
-      cp ~/Documents/1pass-snm/linux/op /usr/local/bin/
+      chmod u+x ~/.scripts/1pass-snm/linux/op
+      cp ~/.scripts/1pass-snm/linux/op /usr/bin/
     fi
   fi
 
   # Append the onepass path into the bashrc or zshrc file
   if [ -f ~/.bashrc ]
    then
-    echo "source ~/Documents/1pass-snm/onepass.sh" >> ~/.bashrc
+    echo "# 1pass CLI Source from https://github.com/Littlejord27/1password-securenote-maker" >> ~/.bashrc
+    if [ "$1" = "mac" ]
+     then
+      echo "source ~/Documents/1pass-snm/onepass.sh" >> ~/.bashrc
+    fi
+    if [ "$1" = "linux" ]
+     then
+      echo "source ~/.scripts/1pass-snm/onepass.sh" >> ~/.bashrc
+    fi
+    echo "Appending to ~/.bashrc"
    elif [ -f ~/.zshrc ]
     then
-     echo "source ~/Documents/1pass-snm/onepass.sh" >> ~/.zshrc
+     echo "# 1pass CLI Source from https://github.com/Littlejord27/1password-securenote-maker" >> ~/.zshrc
+     if [ "$1" = "mac" ]
+     then
+      echo "source ~/Documents/1pass-snm/onepass.sh" >> ~/.zshrc
+    fi
+    if [ "$1" = "linux" ]
+     then
+      echo "source ~/.scripts/1pass-snm/onepass.sh" >> ~/.zshrc
+    fi
+     echo "Appending to ~/.zshrc"
    else
     echo "Can not find bashrc or zshrc to add to. Add ~/Documents/1pass-cbw/onepass.sh to your path terminal somehow."
   fi
