@@ -12,10 +12,10 @@ chmod u+x ~/Documents/1pass-snm/./install.sh
 
 #### Linux x32 install (Digital Ocean droplets)
 ```shell
-mkdir ~/Documents/1pass-snm
-git clone https://github.com/Littlejord27/1password-securenote-maker.git ~/Documents/1pass-snm
-chmod u+x ~/Documents/1pass-snm/./install.sh
-~/Documents/1pass-snm/./install.sh linux
+mkdir -p ~/.scripts/1pass-snm
+git clone https://github.com/Littlejord27/1password-securenote-maker.git ~/.scripts/1pass-snm
+chmod u+x ~/.scripts/1pass-snm/./install.sh
+~/.scripts/1pass-snm/./install.sh linux
 ```
 
 ## First time setup
