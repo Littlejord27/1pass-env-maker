@@ -10,6 +10,8 @@
   
   read 'project_name?Project Name: '
 
+  formatedProjectName=$(echo $project_name | sed 's/ //g' | awk '{print tolower($0)}')
+
   if [ -n "$project_name" ]
     then
       temp_proj_name=$project_name' - Staging - Env'
@@ -21,11 +23,11 @@
          note_title=$temp_proj_name
       fi
 
-      1pass-create-securenote $project_name $note_title 
+      1pass-create-securenote $formatedProjectName $note_title 
 
       git clone https://github.com/bryanlittlefield/TUGBOAT.git .
 
-      1pass-create-env $project_name $uuid
+      1pass-create-env $formatedProjectName $uuid
 
       read 'repo_addr?Git Repo to clone: '
       if [ -n "$repo_addr" ]
@@ -41,9 +43,12 @@
       if [ "$create_wp_bool" = "y" ] || [ "$create_wp_bool" = "ye" ] || [ "$create_wp_bool" = "yes" ]
         then
          1pass-create-config
-         1pass-create-configdb $uuid
-         mv wp-config.php var/www/html/wp-config.php
-         mv wp-config-db.php var/www/html/wp-config-db.php
+         1pass-create-configdb $formatedProjectName $uuid
+         if [ -n "$repo_addr" ]
+          then
+           mv wp-config.php var/www/html/
+           mv wp-config-db.php var/www/html/
+        fi
         else
       fi
 
@@ -120,10 +125,10 @@
 1pass-create-configdb(){
   if [ "$#" -eq 1 ]
    then
-    mysql_database=$(op get item "$1" | jq '.details.sections[] | select(.title=="MySQL") | .fields[] | select(.t=="MYSQL_DATABASE").v' | cut -d '"' -f 2)
-    mysql_user=$(op get item "$1" | jq '.details.sections[] | select(.title=="MySQL") | .fields[] | select(.t=="MYSQL_USER").v' | cut -d '"' -f 2)
-    mysql_password=$(op get item "$1" | jq '.details.sections[] | select(.title=="MySQL") | .fields[] | select(.t=="MYSQL_PASSWORD").v' | cut -d '"' -f 2)
-    mysql_host='localhost'
+    mysql_database=$(op get item "$2" | jq '.details.sections[] | select(.title=="MySQL") | .fields[] | select(.t=="MYSQL_DATABASE").v' | cut -d '"' -f 2)
+    mysql_user=$(op get item "$2" | jq '.details.sections[] | select(.title=="MySQL") | .fields[] | select(.t=="MYSQL_USER").v' | cut -d '"' -f 2)
+    mysql_password=$(op get item "$2" | jq '.details.sections[] | select(.title=="MySQL") | .fields[] | select(.t=="MYSQL_PASSWORD").v' | cut -d '"' -f 2)
+    mysql_host=$1"_db"
     salt=$(curl -L https://api.wordpress.org/secret-key/1.1/salt/)
     sh ~/Documents/1pass-snm/wp-config-db.sh $mysql_database $mysql_user $mysql_password $mysql_host $salt > wp-config-db.php
   fi
