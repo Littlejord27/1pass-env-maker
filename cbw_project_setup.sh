@@ -1,39 +1,80 @@
 #!/bin/bash
 
 projectSetup(){
+  if [ "$1" = "newproject" ] || [ "$1" = "newProject" ]
+    then
+      newProject
+  elif [ "$1" = "login" ]
+    then
+      if [ "$2" = "--save" ]
+        then
+          echo "Please type your Master Password for 1password"
+          echo "It will be saved as .password in the script folder"
+          read -s __masterpassop
+
+          if [ -f ~/.scripts/1pass-snm/cbw_project_setup.sh ]
+            then
+              echo $__masterpassop > ~/.scripts/1pass-snm/.password
+              1pass-login
+          elif [ -f ~/Documents/1pass-snm/cbw_project_setup.sh ]
+            then
+              echo $__masterpassop > ~/Documents/1pass-snm/.password
+              1pass-login
+          else
+              echo "Could not find script folder to save .password to"
+              echo "Either move the script folder to ~/Documents/1pass-snm or ~/.scripts/1pass-snm"
+              echo "Or create your own .password file in the folder directory"
+          fi
+      elif [ "$2" = "--help" ]
+        then
+          echo "projectSetup login"
+          echo "projectSetup login --save"
+          echo "projectSetup help --save"
+      else
+          1pass-login
+      fi
+  elif [ "$1" = "--help" ]
+    then
+      echo "Help -- I need somebody --- Section had not been done yet"
+  else 
+    echo "Invalid Command. Please type 'projectSetup --help' "
+  fi
+}
+
+newProject(){
 
   1pass-login
 
-  uuid=0
+  __uuid=0
   
   echo "Project Name:"
-  read project_name
+  read __project_name
 
 
-  formatedProjectName=$(echo $project_name | sed 's/ //g' | awk '{print tolower($0)}')
+  __formatedProjectName=$(echo $__project_name | sed 's/ //g' | awk '{print tolower($0)}')
 
-  if [ -n "$project_name" ]
+  if [ -n "$__project_name" ]
     then
-      temp_proj_name=$project_name' - Staging - Env'
-      echo "1password Title ($temp_proj_name): "
-      read note_title
-      if [ -n "$note_title" ]
+      __temp_proj_name=$__project_name' - Staging - Env'
+      echo "1password Title ($__temp_proj_name): "
+      read __note_title
+      if [ -n "$__note_title" ]
         then
-         note_title=$note_title
+         __note_title=$__note_title
         else
-         note_title=$temp_proj_name
+         __note_title=$__temp_proj_name
       fi
 
       echo "Creating 1password note..."
 
-      1pass-create-securenote $formatedProjectName $note_title 
+      1pass-create-securenote $__formatedProjectName $__note_title 
 
       echo "Note finished creating"
 
       echo "Clone TUGBOAT down (1) or just create .env file (2)?: "
-      read clone_tugboat_bool
+      read __clone_tugboat_bool
 
-      if [ "$clone_tugboat_bool" = "1" ]
+      if [ "$__clone_tugboat_bool" = "1" ]
         then
 
           echo "Cloning in Tugboat..."
@@ -42,32 +83,32 @@ projectSetup(){
           mkdir .1pass-templates
 
           echo "Creating .env file..."
-          1pass-create-env $formatedProjectName $uuid
+          1pass-create-env $__formatedProjectName $__uuid
 
           echo "Git Repo to clone: "
-          read repo_addr
+          read __repo_addr
 
-          if [ -n "$repo_addr" ]
+          if [ -n "$__repo_addr" ]
             then
               docker-compose up -d
               rm -rf var/www/html
-              git clone $repo_addr var/www/html/
+              git clone $__repo_addr var/www/html/
             else
           fi
         else
           mkdir .1pass-templates
           echo "Creating .env file..."
-          1pass-create-env $formatedProjectName $uuid
+          1pass-create-env $__formatedProjectName $__uuid
       fi
       
       echo "Create wp-config? (yes/no): "
-      read create_wp_bool
+      read __create_wp_bool
 
-      if [ "$create_wp_bool" = "y" ] || [ "$create_wp_bool" = "ye" ] || [ "$create_wp_bool" = "yes" ]
+      if [ "$__create_wp_bool" = "y" ] || [ "$__create_wp_bool" = "ye" ] || [ "$__create_wp_bool" = "yes" ]
         then
          1pass-create-config
-         1pass-create-configdb $formatedProjectName $uuid
-         if [ -n "$repo_addr" ]
+         1pass-create-configdb $__formatedProjectName $__uuid
+         if [ -n "$__repo_addr" ]
           then
            mv wp-config.php var/www/html/
            mv wp-config-db.php var/www/html/
@@ -115,8 +156,8 @@ projectSetup(){
       securenote=$(echo $securenote | jq --arg SECTION_2_HASH $SECTION_2_HASH --arg HTPASSWD_USER_HASH $HTPASSWD_USER_HASH --arg HTPASSWD_USER_VALUE $HTPASSWD_USER_VALUE --arg HTPASSWD_PASS_HASH $HTPASSWD_PASS_HASH --arg HTPASSWD_PASS_VALUE $HTPASSWD_PASS_VALUE '.sections[2] |= .+ {"fields":[{"k":"string","n":$HTPASSWD_USER_HASH,"t":"HTPASSWD_USER","v":$HTPASSWD_USER_VALUE},{"k":"concealed","n":$HTPASSWD_PASS_HASH,"t":"HTPASSWD_PASS","v":$HTPASSWD_PASS_VALUE}], name:$SECTION_2_HASH, title:"HTACCESS"}' | op encode)
 
       # Send the template into One Note and return the UUID of the new note.
-      uuid=$(op create item 'Secure Note' $securenote --title=$2 --vault=Private)
-      uuid=$(echo $uuid | jq '.uuid' | cut -d '"' -f 2)
+      __uuid=$(op create item 'Secure Note' $securenote --title=$2 --vault=Shared)
+      __uuid=$(echo $__uuid | jq '.uuid' | cut -d '"' -f 2)
    fi
 }
 
@@ -126,16 +167,16 @@ projectSetup(){
   if [ "$#" -eq 2 ]
    then
     project_name=$1
-    htpasswd_user=$(op get item "$2" | jq '.details.sections[] | select(.title=="HTACCESS") | .fields[] | select(.t=="HTPASSWD_USER").v' | cut -d '"' -f 2)
-    htpasswd_pass=$(op get item "$2" | jq '.details.sections[] | select(.title=="HTACCESS") | .fields[] | select(.t=="HTPASSWD_PASS").v' | cut -d '"' -f 2)
-    root_user_pass=$(op get item "$2" | jq '.details.sections[] | select(.title=="Container SSH") | .fields[] | select(.t=="ROOT_USER_PASS").v' | cut -d '"' -f 2)
-    dev_user_pass=$(op get item "$2" | jq '.details.sections[] | select(.title=="Container SSH") | .fields[] | select(.t=="DEV_USER_PASS").v' | cut -d '"' -f 2)
-    mysql_root_password=$(op get item "$2" | jq '.details.sections[] | select(.title=="MySQL") | .fields[] | select(.t=="MYSQL_ROOT_PASSWORD").v' | cut -d '"' -f 2)
-    mysql_database=$(op get item "$2" | jq '.details.sections[] | select(.title=="MySQL") | .fields[] | select(.t=="MYSQL_DATABASE").v' | cut -d '"' -f 2)
-    mysql_user=$(op get item "$2" | jq '.details.sections[] | select(.title=="MySQL") | .fields[] | select(.t=="MYSQL_USER").v' | cut -d '"' -f 2)
-    mysql_password=$(op get item "$2" | jq '.details.sections[] | select(.title=="MySQL") | .fields[] | select(.t=="MYSQL_PASSWORD").v' | cut -d '"' -f 2)
+    __htpasswd_user=$(op get item "$2" | jq '.details.sections[] | select(.title=="HTACCESS") | .fields[] | select(.t=="HTPASSWD_USER").v' | cut -d '"' -f 2)
+    __htpasswd_pass=$(op get item "$2" | jq '.details.sections[] | select(.title=="HTACCESS") | .fields[] | select(.t=="HTPASSWD_PASS").v' | cut -d '"' -f 2)
+    __root_user_pass=$(op get item "$2" | jq '.details.sections[] | select(.title=="Container SSH") | .fields[] | select(.t=="ROOT_USER_PASS").v' | cut -d '"' -f 2)
+    __dev_user_pass=$(op get item "$2" | jq '.details.sections[] | select(.title=="Container SSH") | .fields[] | select(.t=="DEV_USER_PASS").v' | cut -d '"' -f 2)
+    __mysql_root_password=$(op get item "$2" | jq '.details.sections[] | select(.title=="MySQL") | .fields[] | select(.t=="MYSQL_ROOT_PASSWORD").v' | cut -d '"' -f 2)
+    __mysql_database=$(op get item "$2" | jq '.details.sections[] | select(.title=="MySQL") | .fields[] | select(.t=="MYSQL_DATABASE").v' | cut -d '"' -f 2)
+    __mysql_user=$(op get item "$2" | jq '.details.sections[] | select(.title=="MySQL") | .fields[] | select(.t=="MYSQL_USER").v' | cut -d '"' -f 2)
+    __mysql_password=$(op get item "$2" | jq '.details.sections[] | select(.title=="MySQL") | .fields[] | select(.t=="MYSQL_PASSWORD").v' | cut -d '"' -f 2)
     curl https://gist.githubusercontent.com/Littlejord27/365a52b1834da0e2a1f403af37603692/raw/b9259eba0a1b07bb2aed22dd4e4c37ac9b728aa3/env.sh > .1pass-templates/env.sh
-    sh  .1pass-templates/env.sh $project_name $htpasswd_user $htpasswd_pass $root_user_pass $dev_user_pass $mysql_root_password $mysql_database $mysql_user $mysql_password > .env
+    sh  .1pass-templates/env.sh $project_name $__htpasswd_user $__htpasswd_pass $__root_user_pass $__dev_user_pass $__mysql_root_password $__mysql_database $__mysql_user $__mysql_password > .env
   fi
 }
 
@@ -149,20 +190,28 @@ projectSetup(){
 # GITHUB Gist URL for wp-config-db.sh
 # https://gist.githubusercontent.com/Littlejord27/e269c2b5e85a8341fbc8c363a983da9b/raw/59894f991cecdff054df9f4299c39ccf6c11001a/wp-config-db.sh
 1pass-create-configdb(){
-  if [ "$#" -eq 1 ]
+  if [ "$#" -eq 2 ]
    then
-    mysql_database=$(op get item "$2" | jq '.details.sections[] | select(.title=="MySQL") | .fields[] | select(.t=="MYSQL_DATABASE").v' | cut -d '"' -f 2)
-    mysql_user=$(op get item "$2" | jq '.details.sections[] | select(.title=="MySQL") | .fields[] | select(.t=="MYSQL_USER").v' | cut -d '"' -f 2)
-    mysql_password=$(op get item "$2" | jq '.details.sections[] | select(.title=="MySQL") | .fields[] | select(.t=="MYSQL_PASSWORD").v' | cut -d '"' -f 2)
-    mysql_host=$1"_db"
-    salt=$(curl -L https://api.wordpress.org/secret-key/1.1/salt/)
+    __mysql_database=$(op get item "$2" | jq '.details.sections[] | select(.title=="MySQL") | .fields[] | select(.t=="MYSQL_DATABASE").v' | cut -d '"' -f 2)
+    __mysql_user=$(op get item "$2" | jq '.details.sections[] | select(.title=="MySQL") | .fields[] | select(.t=="MYSQL_USER").v' | cut -d '"' -f 2)
+    __mysql_password=$(op get item "$2" | jq '.details.sections[] | select(.title=="MySQL") | .fields[] | select(.t=="MYSQL_PASSWORD").v' | cut -d '"' -f 2)
+    __mysql_host=$1"_db"
+    __salt=$(curl -L https://api.wordpress.org/secret-key/1.1/salt/)
     curl https://gist.githubusercontent.com/Littlejord27/e269c2b5e85a8341fbc8c363a983da9b/raw/59894f991cecdff054df9f4299c39ccf6c11001a/wp-config-db.sh > .1pass-templates/wp-config-db.sh
-    sh .1pass-templates/wp-config-db.sh $mysql_database $mysql_user $mysql_password $mysql_host $salt > wp-config-db.php
+    sh .1pass-templates/wp-config-db.sh $__mysql_database $__mysql_user $__mysql_password $__mysql_host $__salt > wp-config-db.php
   fi
 }
 
 1pass-login(){
- eval $(op signin coolblueweb)
+ if [ -f ~/.scripts/1pass-snm/.password ]
+    then
+      eval $(op signin coolblueweb $(cat ~/.scripts/1pass-snm/.password))
+  elif [ -f ~/Documents/1pass-snm/.password ]
+    then
+      eval $(op signin coolblueweb $(cat ~/Documents/1pass-snm/.password))
+  else
+      eval $(op signin coolblueweb)
+  fi
  # First login command
  # op signin coolblueweb.1password.com wendy_appleseed@coolblueweb.com A3-XXXXXX-XXXXXX-XXXXX-XXXXX-XXXXX-XXXXX)
 }
