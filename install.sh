@@ -45,11 +45,11 @@ if [ "$#" -eq 1 ]
     echo "# 1pass CLI Source from https://github.com/Littlejord27/1password-securenote-maker" >> ~/.bashrc
     if [ "$1" = "mac" ]
      then
-      echo "source ~/Documents/1pass-snm/onepass.sh" >> ~/.bashrc
+      echo "source ~/Documents/1pass-snm/projectSetup.sh" >> ~/.bashrc
     fi
     if [ "$1" = "linux" ]
      then
-      echo "source ~/.scripts/1pass-snm/onepass.sh" >> ~/.bashrc
+      echo "source ~/.scripts/1pass-snm/projectSetup.sh" >> ~/.bashrc
     fi
     echo "Appending to ~/.bashrc"
    else
@@ -61,11 +61,11 @@ if [ "$#" -eq 1 ]
     echo "# 1pass CLI Source from https://github.com/Littlejord27/1password-securenote-maker" >> ~/.zshrc
     if [ "$1" = "mac" ]
      then
-      echo "source ~/Documents/1pass-snm/onepass.sh" >> ~/.zshrc
+      echo "source ~/Documents/1pass-snm/projectSetup.sh" >> ~/.zshrc
     fi
     if [ "$1" = "linux" ]
      then
-      echo "source ~/.scripts/1pass-snm/onepass.sh" >> ~/.zshrc
+      echo "source ~/.scripts/1pass-snm/projectSetup.sh" >> ~/.zshrc
     fi
     echo "Appending to ~/.zshrc"
    else
