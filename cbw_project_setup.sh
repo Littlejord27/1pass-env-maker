@@ -41,9 +41,9 @@ projectsetup(){
       fi
   elif [ "$1" = "firstlogin" ]
     then
-      printf "\nCoolblueweb Email Address?"
+      printf "\nCoolblueweb Email Address?   "
       read __1passeml
-      printf "1Password secret-key -- can be found in your emergency kit? (A3-XXXXXX-XXXXXX-XXXXX-XXXXX-XXXXX-XXXXX)"
+      printf "1Password secret-key -- can be found in your emergency kit? (A3-XXXXXX-XXXXXX-XXXXX-XXXXX-XXXXX-XXXXX)\n"
       read __1passScky
       printf "\n"
       op signin coolblueweb.1password.com $__1passeml $__1passScky
