@@ -14,8 +14,8 @@ projectsetup(){
     then
       if [ "$2" = "--save" ]
         then
-          echo "Please type your Master Password for 1password"
-          echo "It will be saved as .password in the script folder"
+          printf "Please type your Master Password for 1password"
+          printf "It will be saved as .password in the script folder"
           read -s __masterpassop
 
           if [ -f ~/.scripts/1pass-snm/cbw_project_setup.sh ]
@@ -27,39 +27,39 @@ projectsetup(){
               echo $__masterpassop > ~/Documents/1pass-snm/.password
               1pass-login
           else
-              echo "Could not find script folder to save .password to"
-              echo "Either move the script folder to ~/Documents/1pass-snm or ~/.scripts/1pass-snm"
-              echo "Or create your own .password file in the folder directory"
+              printf "Could not find script folder to save .password to"
+              printf "Either move the script folder to ~/Documents/1pass-snm or ~/.scripts/1pass-snm"
+              printf "Or create your own .password file in the folder directory"
           fi
       elif [ "$2" = "--help" ]
         then
-          echo "projectSetup login"
-          echo "projectSetup login --save"
-          echo "projectSetup help --save"
+          printf "projectSetup login"
+          printf "projectSetup login --save"
+          printf "projectSetup help --save"
       else
           1pass-login
       fi
   elif [ "$1" = "firstlogin" ]
     then
-      echo "\nCoolblueweb Email Address?"
+      printf "\nCoolblueweb Email Address?"
       read __1passeml
-      echo "1Password secret-key -- can be found in your emergency kit? (A3-XXXXXX-XXXXXX-XXXXX-XXXXX-XXXXX-XXXXX)"
+      printf "1Password secret-key -- can be found in your emergency kit? (A3-XXXXXX-XXXXXX-XXXXX-XXXXX-XXXXX-XXXXX)"
       read __1passScky
-      echo "\n"
+      printf "\n"
       op signin coolblueweb.1password.com $__1passeml $__1passScky
-      echo "\nPlease run the 'export OP_SESSION...' command above"
+      printf "\nPlease run the 'export OP_SESSION...' command above"
   elif [ "$1" = "--help" ]
     then
-      echo "Help -- I need somebody --- Section had not been done yet"
+      printf "Help -- I need somebody --- Section had not been done yet"
   else 
-    echo "Invalid Command. Please type 'projectSetup --help' "
+    printf "Invalid Command. Please type 'projectSetup --help' "
   fi
 }
 
 newproject(){
   __uuid=0
   
-  echo "Project Name:"
+  printf "Project Name:"
   read __project_name
 
 
@@ -77,27 +77,27 @@ newproject(){
          __note_title=$__temp_proj_name
       fi
 
-      echo "Creating 1password note..."
+      printf "Creating 1password note..."
 
       1pass-create-securenote $__formatedProjectName $__note_title 
 
-      echo "Note finished creating"
+      printf "Note finished creating"
 
-      echo "Clone TUGBOAT down (1) or just create .env file (2)?: "
+      printf "Clone TUGBOAT down (1) or just create .env file (2)?: "
       read __clone_tugboat_bool
 
       if [ "$__clone_tugboat_bool" = "1" ]
         then
 
-          echo "Cloning in Tugboat..."
+          printf "Cloning in Tugboat..."
           git clone https://github.com/bryanlittlefield/TUGBOAT.git .
 
           mkdir .1pass-templates
 
-          echo "Creating .env file..."
+          printf "Creating .env file..."
           1pass-create-env $__formatedProjectName $__uuid
 
-          echo "Git Repo to clone: "
+          printf "Git Repo to clone: "
           read __repo_addr
 
           if [ -n "$__repo_addr" ]
@@ -106,15 +106,15 @@ newproject(){
               rm -rf var/www/html
               git clone $__repo_addr var/www/html/
             else
-              echo "Skipping cloning repo"
+              printf "Skipping cloning repo"
           fi
         else
           mkdir .1pass-templates
-          echo "Creating .env file..."
+          printf "Creating .env file..."
           1pass-create-env $__formatedProjectName $__uuid
       fi
       
-      echo "Create wp-config? (yes/no): "
+      printf "Create wp-config? (yes/no): "
       read __create_wp_bool
 
       if [ "$__create_wp_bool" = "y" ] || [ "$__create_wp_bool" = "ye" ] || [ "$__create_wp_bool" = "yes" ]
@@ -127,11 +127,11 @@ newproject(){
            mv wp-config-db.php var/www/html/
         fi
         else
-          echo "Skipping cloning wp-config and wp-config-db"
+          printf "Skipping cloning wp-config and wp-config-db"
       fi
 
     else
-      echo 'Project Name Required'
+      printf 'Project Name Required'
   fi
 }
 
