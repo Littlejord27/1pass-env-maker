@@ -1,21 +1,22 @@
 #!/bin/bash
 
-1pass(){
-  1pass-login
-  1pass-securenote-infogather
-}
+projectSetup(){
 
-1pass-securenote-infogather(){
+  1pass-login
+
   uuid=0
   
-  read 'project_name?Project Name: '
+  echo "Project Name:"
+  read project_name
+
 
   formatedProjectName=$(echo $project_name | sed 's/ //g' | awk '{print tolower($0)}')
 
   if [ -n "$project_name" ]
     then
       temp_proj_name=$project_name' - Staging - Env'
-      read 'note_title?1password Title ('$temp_proj_name'): '
+      echo "1password Title ($temp_proj_name): "
+      read note_title
       if [ -n "$note_title" ]
         then
          note_title=$note_title
@@ -23,22 +24,44 @@
          note_title=$temp_proj_name
       fi
 
+      echo "Creating 1password note..."
+
       1pass-create-securenote $formatedProjectName $note_title 
 
-      git clone https://github.com/bryanlittlefield/TUGBOAT.git .
+      echo "Note finished creating"
 
-      1pass-create-env $formatedProjectName $uuid
+      echo "Clone TUGBOAT down (1) or just create .env file (2)?: "
+      read clone_tugboat_bool
 
-      read 'repo_addr?Git Repo to clone: '
-      if [ -n "$repo_addr" ]
+      if [ "$clone_tugboat_bool" = "1" ]
         then
-         docker-compose up -d
-         rm -rf var/www/html
-         git clone $repo_addr var/www/html/
-        else
-      fi
 
-      read 'create_wp_bool?Create wp-config? (yes/no): '
+          echo "Cloning in Tugboat..."
+          git clone https://github.com/bryanlittlefield/TUGBOAT.git .
+
+          mkdir .1pass-templates
+
+          echo "Creating .env file..."
+          1pass-create-env $formatedProjectName $uuid
+
+          echo "Git Repo to clone: "
+          read repo_addr
+
+          if [ -n "$repo_addr" ]
+            then
+              docker-compose up -d
+              rm -rf var/www/html
+              git clone $repo_addr var/www/html/
+            else
+          fi
+        else
+          mkdir .1pass-templates
+          echo "Creating .env file..."
+          1pass-create-env $formatedProjectName $uuid
+      fi
+      
+      echo "Create wp-config? (yes/no): "
+      read create_wp_bool
 
       if [ "$create_wp_bool" = "y" ] || [ "$create_wp_bool" = "ye" ] || [ "$create_wp_bool" = "yes" ]
         then
@@ -56,6 +79,7 @@
       echo 'Project Name Required'
   fi
 }
+
 
 # Docker Functions
 1pass-create-securenote(){
@@ -96,12 +120,8 @@
    fi
 }
 
-1pass-login(){
- eval $(op signin coolblueweb)
- # First login command
- # op signin coolblueweb.1password.com wendy_appleseed@coolblueweb.com A3-XXXXXX-XXXXXX-XXXXX-XXXXX-XXXXX-XXXXX)
-}
-
+# GITHUB Gist URL for env.sh
+# https://gist.githubusercontent.com/Littlejord27/365a52b1834da0e2a1f403af37603692/raw/b9259eba0a1b07bb2aed22dd4e4c37ac9b728aa3/env.sh
 1pass-create-env(){
   if [ "$#" -eq 2 ]
    then
@@ -114,14 +134,20 @@
     mysql_database=$(op get item "$2" | jq '.details.sections[] | select(.title=="MySQL") | .fields[] | select(.t=="MYSQL_DATABASE").v' | cut -d '"' -f 2)
     mysql_user=$(op get item "$2" | jq '.details.sections[] | select(.title=="MySQL") | .fields[] | select(.t=="MYSQL_USER").v' | cut -d '"' -f 2)
     mysql_password=$(op get item "$2" | jq '.details.sections[] | select(.title=="MySQL") | .fields[] | select(.t=="MYSQL_PASSWORD").v' | cut -d '"' -f 2)
-    sh ~/Documents/1pass-snm/env.sh $project_name $htpasswd_user $htpasswd_pass $root_user_pass $dev_user_pass $mysql_root_password $mysql_database $mysql_user $mysql_password > .env
+    curl https://gist.githubusercontent.com/Littlejord27/365a52b1834da0e2a1f403af37603692/raw/b9259eba0a1b07bb2aed22dd4e4c37ac9b728aa3/env.sh > .1pass-templates/env.sh
+    sh  .1pass-templates/env.sh $project_name $htpasswd_user $htpasswd_pass $root_user_pass $dev_user_pass $mysql_root_password $mysql_database $mysql_user $mysql_password > .env
   fi
 }
 
+# GITHUB Gist URL for wp-config.sh
+# https://gist.githubusercontent.com/Littlejord27/59fee22da7453635ad96a8e6199c53a3/raw/1b79473e3e55d45eb23655733a814af8fdfb03bf/wp-config.sh
 1pass-create-config(){
-    sh ~/Documents/1pass-snm/wp-config.sh > wp-config.php
+  curl https://gist.githubusercontent.com/Littlejord27/59fee22da7453635ad96a8e6199c53a3/raw/1b79473e3e55d45eb23655733a814af8fdfb03bf/wp-config.sh > .1pass-templates/wp-config.sh
+  sh .1pass-templates/wp-config.sh > wp-config.php
 }
 
+# GITHUB Gist URL for wp-config-db.sh
+# https://gist.githubusercontent.com/Littlejord27/e269c2b5e85a8341fbc8c363a983da9b/raw/59894f991cecdff054df9f4299c39ccf6c11001a/wp-config-db.sh
 1pass-create-configdb(){
   if [ "$#" -eq 1 ]
    then
@@ -130,6 +156,13 @@
     mysql_password=$(op get item "$2" | jq '.details.sections[] | select(.title=="MySQL") | .fields[] | select(.t=="MYSQL_PASSWORD").v' | cut -d '"' -f 2)
     mysql_host=$1"_db"
     salt=$(curl -L https://api.wordpress.org/secret-key/1.1/salt/)
-    sh ~/Documents/1pass-snm/wp-config-db.sh $mysql_database $mysql_user $mysql_password $mysql_host $salt > wp-config-db.php
+    curl https://gist.githubusercontent.com/Littlejord27/e269c2b5e85a8341fbc8c363a983da9b/raw/59894f991cecdff054df9f4299c39ccf6c11001a/wp-config-db.sh > .1pass-templates/wp-config-db.sh
+    sh .1pass-templates/wp-config-db.sh $mysql_database $mysql_user $mysql_password $mysql_host $salt > wp-config-db.php
   fi
+}
+
+1pass-login(){
+ eval $(op signin coolblueweb)
+ # First login command
+ # op signin coolblueweb.1password.com wendy_appleseed@coolblueweb.com A3-XXXXXX-XXXXXX-XXXXX-XXXXX-XXXXX-XXXXX)
 }
