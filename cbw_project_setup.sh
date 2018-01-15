@@ -1,9 +1,15 @@
 #!/bin/bash
 
-projectSetup(){
+projectsetup(){
   if [ "$1" = "newproject" ] || [ "$1" = "newProject" ]
     then
-      newProject
+      if [ "$2" = "login" ]
+        then
+          1pass-login
+          newproject
+      else
+        newproject
+      fi
   elif [ "$1" = "login" ]
     then
       if [ "$2" = "--save" ]
@@ -33,6 +39,15 @@ projectSetup(){
       else
           1pass-login
       fi
+  elif [ "$1" = "firstlogin" ]
+    then
+      echo "\nCoolblueweb Email Address?"
+      read __1passeml
+      echo "1Password secret-key -- can be found in your emergency kit? (A3-XXXXXX-XXXXXX-XXXXX-XXXXX-XXXXX-XXXXX)"
+      read __1passScky
+      echo "\n"
+      op signin coolblueweb.1password.com $__1passeml $__1passScky
+      echo "\nPlease run the 'export OP_SESSION...' command above"
   elif [ "$1" = "--help" ]
     then
       echo "Help -- I need somebody --- Section had not been done yet"
@@ -41,10 +56,7 @@ projectSetup(){
   fi
 }
 
-newProject(){
-
-  1pass-login
-
+newproject(){
   __uuid=0
   
   echo "Project Name:"
@@ -94,6 +106,7 @@ newProject(){
               rm -rf var/www/html
               git clone $__repo_addr var/www/html/
             else
+              echo "Skipping cloning repo"
           fi
         else
           mkdir .1pass-templates
@@ -114,6 +127,7 @@ newProject(){
            mv wp-config-db.php var/www/html/
         fi
         else
+          echo "Skipping cloning wp-config and wp-config-db"
       fi
 
     else
