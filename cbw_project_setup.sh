@@ -3,13 +3,7 @@
 projectsetup(){
   if [ "$1" = "newproject" ] || [ "$1" = "newProject" ]
     then
-      if [ "$2" = "login" ]
-        then
-          1pass-login
-          newproject
-      else
-        newproject
-      fi
+      newproject
   elif [ "$1" = "login" ]
     then
       if [ "$2" = "--save" ]
@@ -58,6 +52,9 @@ projectsetup(){
 }
 
 newproject(){
+
+  1pass-login
+
   __uuid=0
   
   printf "Project Name:   "
@@ -68,7 +65,7 @@ newproject(){
 
   if [ -n "$__project_name" ]
     then
-      __temp_proj_name=$__project_name' - Staging - Env'
+      __temp_proj_name=$__project_name'-Staging-Env'
       printf "1password Title ($__temp_proj_name):   "
       read __note_title
       if [ -n "$__note_title" ]
@@ -79,6 +76,8 @@ newproject(){
       fi
 
       printf "Creating 1password note...\n"
+
+      __note_title=${__note_title//[[:blank:]]/}
 
       1pass-create-securenote $__formatedProjectName $__note_title 
 
