@@ -33,14 +33,15 @@ projectsetup firstlogin
 
 General Usage:
 
-The most complete function is the **1pass** function. It takes in a username and a title. 
-It will create a 1password secure note in your private vault as well as generate an
-.env, wp-config-db.php, and wp-config.php file in the directory you call the function.
+The full script is meant to create a new working enviroment for a project. It will clone in TUGBOAT, create the .env file, randomize the passwords in the .env, generate a 1password note entry based on the .env, spin up the tugboat enviroment, clone in a git repo, then create the wp-config.php and wp-config-db.php.
+
+From that point, all that would be needed is importing the database. 
+
+#### New Project Setup
 
 ```shell
 projectsetup newproject
 ```
-
 
 
 New project will require the following information
@@ -61,7 +62,9 @@ Git Repo: If you choose to clone in tugboat, it will then prompt you for a repo 
 projectsetup login --save
 ```
 
+## All Commands
 
+Section Comming Soon.
 
 
 ## Known Issues
