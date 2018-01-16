@@ -26,20 +26,7 @@ You will need your secret key for the next part (A3-XXXXXX-XXXXXX-XXXXX-XXXXX-XX
 In your terminal, run the following command:
 
 ```shell
-op signin company.1password.com email@domain.com A3-XXXXXX-XXXXXX-XXXXX-XXXXX-XXXXX-XXXXX
-```
-
-It should prompt you for your 1password master password. 
-After that, you can sign in using 
-
-```shell
-1pass-login
-```
-
-or
-
-```shell
-eval $(op signin company)
+projectsetup firstlogin
 ```
 
 ## Usage
@@ -51,38 +38,20 @@ It will create a 1password secure note in your private vault as well as generate
 .env, wp-config-db.php, and wp-config.php file in the directory you call the function.
 
 ```shell
-1pass username "Secure Note - Title - Name"
+projectsetup newproject
 ```
 
 
-### 1pass-login
 
-```shell
-1pass username "Secure Note - Title - Name"
-```
+New project will require the following information
 
-### 1pass-create-securenote
+```text
+Project Name: Name of the project. This will be used in the .env file.
 
-```shell
-1pass-create-securenote username "Secure Note - Title - Name"
-```
+1password Title: This is the title given to the entry in 1password
 
-### 1pass-create-env
+Git Repo: If you choose to clone in tugboat, it will then prompt you for a repo address that will then clone into var/www/html
 
-```shell
-1pass-create-configdb uuid
-```
-
-### 1pass-create-configdb
-
-```shell
-1pass-create-configdb uuid
-```
-
-### 1pass-create-config
-
-```shell
-1pass-create-config
 ```
 
 
