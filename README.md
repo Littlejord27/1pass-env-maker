@@ -26,64 +26,45 @@ You will need your secret key for the next part (A3-XXXXXX-XXXXXX-XXXXX-XXXXX-XX
 In your terminal, run the following command:
 
 ```shell
-op signin company.1password.com email@domain.com A3-XXXXXX-XXXXXX-XXXXX-XXXXX-XXXXX-XXXXX
-```
-
-It should prompt you for your 1password master password. 
-After that, you can sign in using 
-
-```shell
-1pass-login
-```
-
-or
-
-```shell
-eval $(op signin company)
+projectsetup firstlogin
 ```
 
 ## Usage
 
 General Usage:
 
-The most complete function is the **1pass** function. It takes in a username and a title. 
-It will create a 1password secure note in your private vault as well as generate an
-.env, wp-config-db.php, and wp-config.php file in the directory you call the function.
+The full script is meant to create a new working enviroment for a project. It will clone in TUGBOAT, create the .env file, randomize the passwords in the .env, generate a 1password note entry based on the .env, spin up the tugboat enviroment, clone in a git repo, then create the wp-config.php and wp-config-db.php.
+
+From that point, all that would be needed is importing the database. 
+
+#### New Project Setup
 
 ```shell
-1pass username "Secure Note - Title - Name"
+projectsetup newproject
 ```
 
 
-### 1pass-login
+New project will require the following information
 
-```shell
-1pass username "Secure Note - Title - Name"
+```text
+Project Name: Name of the project. This will be used in the .env file.
+
+1password Title: This is the title given to the entry in 1password
+
+Git Repo: If you choose to clone in tugboat, it will then prompt you for a repo address that will then clone into var/www/html
+
 ```
 
-### 1pass-create-securenote
+
+#### Skip typing in 1Password Master Password each time
 
 ```shell
-1pass-create-securenote username "Secure Note - Title - Name"
+projectsetup login --save
 ```
 
-### 1pass-create-env
+## All Commands
 
-```shell
-1pass-create-configdb uuid
-```
-
-### 1pass-create-configdb
-
-```shell
-1pass-create-configdb uuid
-```
-
-### 1pass-create-config
-
-```shell
-1pass-create-config
-```
+Section Comming Soon.
 
 
 ## Known Issues
