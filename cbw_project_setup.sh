@@ -211,6 +211,12 @@ newproject(){
     __mysql_password=$(op get item "$2" | jq '.details.sections[] | select(.title=="MySQL") | .fields[] | select(.t=="MYSQL_PASSWORD").v' | cut -d '"' -f 2)
     __mysql_host=$1"_db"
     __salt=$(curl -L https://api.wordpress.org/secret-key/1.1/salt/)
+    printf "***********************************************\n**\n"
+    printf "** Host: $__mysql_host\n"
+    printf "** User: $__mysql_user\n"
+    printf "** Pass: $__mysql_password\n"
+    printf "** DB  : $__mysql_database\n**\n"
+    printf "***********************************************\n"
     curl https://gist.githubusercontent.com/Littlejord27/e269c2b5e85a8341fbc8c363a983da9b/raw/59894f991cecdff054df9f4299c39ccf6c11001a/wp-config-db.sh > .1pass-templates/wp-config-db.sh
     sh .1pass-templates/wp-config-db.sh $__mysql_database $__mysql_user $__mysql_password $__mysql_host $__salt > wp-config-db.php
   fi
