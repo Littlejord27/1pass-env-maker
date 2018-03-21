@@ -1,23 +1,42 @@
 # 1password Securenote Maker
 ## Basic Installation
 
-### via curl
+### Requirments
 
+#### Mac
 
-```shell
-sh -c "$(curl -fsSL https://gist.githubusercontent.com/itsninasarabia/4a00e1e2b29b949ef3b99cc0920784af/raw/.install.sh | sed 's/{{EXT}}/1pass-env-maker/g')"
-```
-
-Install Dependencies
-
+JQ Command-line JSON Processor
+https://stedolan.github.io/jq/
 ```shell
 brew install jq
 ```
+1password CLI
 ```shell
 curl https://cache.agilebits.com/dist/1P/op/pkg/v0.3/op_darwin_amd64_v0.3.zip > op.zip
 unzip op.zip
 rm op.*
 mv op /usr/local/bin/op
+```
+
+#### Linux
+
+JQ Command-line JSON Processor
+https://stedolan.github.io/jq/
+```shell
+sudo apt-get install jq
+```
+1password CLI
+```shell
+curl https://cache.agilebits.com/dist/1P/op/pkg/v0.3/op_linux_amd64_v0.3.zip > op.zip
+unzip op.zip
+rm op.*
+mv op /usr/local/bin/op
+```
+
+### via curl
+
+```shell
+sh -c "$(curl -fsSL https://gist.githubusercontent.com/itsninasarabia/4a00e1e2b29b949ef3b99cc0920784af/raw/.install.sh | sed 's/{{EXT}}/1pass-env-maker/g')"
 ```
 
 Make the 1pass file executable 
