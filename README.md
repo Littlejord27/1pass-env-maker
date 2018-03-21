@@ -20,7 +20,7 @@ rm op.*
 mv op /usr/local/bin/op
 ```
 
-Make the dc-replace file executable 
+Make the 1pass file executable 
 ```shell
 chmod u+x ~/.cbw-bash-tools/1pass-env-maker/1pass-env-maker
 ```
