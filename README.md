@@ -1,21 +1,33 @@
 # 1password Securenote Maker
-## Installation
+## Basic Installation
 
-#### Mac OSX x64 install
+### via curl
+
+
 ```shell
-mkdir ~/Documents/1pass-snm
-git clone https://github.com/Littlejord27/1password-securenote-maker.git ~/Documents/1pass-snm
-chmod u+x ~/Documents/1pass-snm/./install.sh
-~/Documents/1pass-snm/./install.sh mac
+sh -c "$(curl -fsSL https://gist.githubusercontent.com/itsninasarabia/4a00e1e2b29b949ef3b99cc0920784af/raw/.install.sh | sed 's/{{EXT}}/1pass-env-maker/g')"
 ```
 
+Install Dependencies
 
-#### Linux x32 install (Digital Ocean droplets)
 ```shell
-mkdir -p ~/.scripts/1pass-snm
-git clone https://github.com/Littlejord27/1password-securenote-maker.git ~/.scripts/1pass-snm
-chmod u+x ~/.scripts/1pass-snm/./install.sh
-~/.scripts/1pass-snm/./install.sh linux
+brew install jq
+```
+```shell
+curl https://cache.agilebits.com/dist/1P/op/pkg/v0.3/op_darwin_amd64_v0.3.zip > op.zip
+unzip op.zip
+rm op.*
+mv op /usr/local/bin/op
+```
+
+Make the dc-replace file executable 
+```shell
+chmod u+x ~/.cbw-bash-tools/1pass-env-maker/1pass-env-maker
+```
+
+Move the executable to somewhere in your PATH.
+```shell
+sudo mv ~/.cbw-bash-tools/1pass-env-maker/1pass-env-maker /usr/local/bin/1pass-env-maker
 ```
 
 ## First time setup
