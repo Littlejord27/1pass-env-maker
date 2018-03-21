@@ -33,6 +33,8 @@ rm op.*
 mv op /usr/local/bin/op
 ```
 
+### Install
+
 ### via curl
 
 ```shell
