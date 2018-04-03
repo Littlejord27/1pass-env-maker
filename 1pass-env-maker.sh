@@ -102,8 +102,7 @@ newproject(){
 
           if [ -n "$__repo_addr" ]
             then
-              docker-compose up -d
-              rm -rf var/www/html
+              mkdir var/www/html
               git clone $__repo_addr var/www/html/
             else
               printf "Skipping cloning repo\n"
