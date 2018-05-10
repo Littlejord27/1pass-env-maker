@@ -113,21 +113,11 @@ newproject(){
           1pass-create-env $__formatedProjectName $__uuid
       fi
       
-      printf "Create wp-config? (yes/no):   "
-      read __create_wp_bool
-
-      if [ "$__create_wp_bool" = "y" ] || [ "$__create_wp_bool" = "ye" ] || [ "$__create_wp_bool" = "yes" ]
-        then
-         1pass-create-config
-         1pass-create-configdb $__formatedProjectName $__uuid
-         if [ -n "$__repo_addr" ]
-          then
-           mv wp-config.php var/www/html/
-           mv wp-config-db.php var/www/html/
-        fi
-        else
-          printf "Skipping cloning wp-config and wp-config-db\n"
-      fi
+      printf "Creating wp-config.php\n"
+      1pass-create-config
+      
+      printf "Creating wp-config-db.php\n"
+      1pass-create-configdb $__formatedProjectName $__uuid
 
     else
       printf 'Project Name Required\n'
